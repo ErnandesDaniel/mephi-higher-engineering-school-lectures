@@ -64,12 +64,12 @@ function PostsPage() {
       )}
 
       <List
-        grid={{ gutter: 16, xs: 1, sm: 1, md: 2 }}
+        grid={{ gutter: 16, xs: 1 }}
         dataSource={allPosts}
         renderItem={(post) => (
           <List.Item>
             <Card
-              style={{ width: 400 }}
+              style={{ width: "70%", margin: "0 auto" }}
               title={<Link to="/posts/$postId" params={{ postId: String(post.id) }}>{post.title}</Link>}
               extra={
                 <Space>
