@@ -27,7 +27,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
           ]}
         />
       </Header>
-      <Content style={{ padding: 24, maxWidth: 960, margin: "0 auto", width: "100%" }}>
+      <Content style={{ padding: 24, maxWidth: "100%", margin: "0 auto", width: "100%" }}>
         <Outlet />
       </Content>
       <Footer style={{ textAlign: "center", color: "#999" }}>
