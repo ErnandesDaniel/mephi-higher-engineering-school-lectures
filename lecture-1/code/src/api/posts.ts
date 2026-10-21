@@ -1,5 +1,5 @@
 // src/api/posts.ts
-// Mock API: имитирует бэкенд с задержкой. Данные хранятся в памяти модуля,
+// Mock API: данные хранятся в памяти модуля,
 // поэтому мутации (создание/редактирование/удаление) сразу отражаются в списках.
 
 export interface Post {
@@ -16,8 +16,6 @@ export interface Comment {
   author: string;
 }
 
-const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
 let posts: Post[] = Array.from({ length: 24 }, (_, i) => ({
   id: i + 1,
   title: `Пост #${i + 1}: ${["React", "Vite", "TanStack", "Oxc", "TypeScript"][i % 5]} в деталях`,
@@ -33,7 +31,6 @@ const comments: Comment[] = Array.from({ length: 40 }, (_, i) => ({
 }));
 
 export async function fetchPosts(params: { page: number; pageSize: number; search?: string }) {
-  await delay(400);
   const search = (params.search ?? "").toLowerCase().trim();
   const filtered = search
     ? posts.filter((p) => p.title.toLowerCase().includes(search) || p.body.toLowerCase().includes(search))
@@ -44,19 +41,16 @@ export async function fetchPosts(params: { page: number; pageSize: number; searc
 }
 
 export async function fetchPost(id: number) {
-  await delay(300);
   const post = posts.find((p) => p.id === id);
   if (!post) throw new Error(`Пост ${id} не найден`);
   return post;
 }
 
 export async function fetchComments(postId: number) {
-  await delay(250);
   return comments.filter((c) => c.postId === postId);
 }
 
 export async function createPost(input: { title: string; body: string }) {
-  await delay(500);
   const post: Post = {
     id: Math.max(0, ...posts.map((p) => p.id)) + 1,
     title: input.title,
@@ -68,7 +62,6 @@ export async function createPost(input: { title: string; body: string }) {
 }
 
 export async function updatePost(id: number, input: { title: string; body: string }) {
-  await delay(400);
   const post = posts.find((p) => p.id === id);
   if (!post) throw new Error(`Пост ${id} не найден`);
   post.title = input.title;
@@ -77,6 +70,5 @@ export async function updatePost(id: number, input: { title: string; body: strin
 }
 
 export async function deletePost(id: number) {
-  await delay(300);
   posts = posts.filter((p) => p.id !== id);
 }
