@@ -46,7 +46,7 @@ function EditorPage() {
   if (isEdit && postQuery.isLoading) return <Spin />;
 
   return (
-    <Space direction="vertical" size="large" style={{ width: "100%", maxWidth: 720 }}>
+    <Space direction="vertical" size="large" style={{ width: "100%", maxWidth: 720, margin: "0 auto" }}>
       <Typography.Title level={3}>{isEdit ? "Редактирование поста" : "Новый пост"}</Typography.Title>
       <Form
         form={form}
