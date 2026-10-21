@@ -72,16 +72,18 @@ function PostsPage() {
             extra={
               <Space>
                 <Link to="/editor" search={{ id: post.id }}>
-                  <Button type="text" icon={<EditOutlined />} size="small" />
+                  <Button type="text" icon={<EditOutlined />} size="large">Редактировать</Button>
                 </Link>
                 <Button
                   type="text"
                   danger
                   icon={<DeleteOutlined />}
-                  size="small"
+                  size="large"
                   loading={deleteMutation.isPending}
                   onClick={() => deleteMutation.mutate(post.id)}
-                />
+                  >
+                    Удалить
+                  </Button>
               </Space>
             }
             hoverable

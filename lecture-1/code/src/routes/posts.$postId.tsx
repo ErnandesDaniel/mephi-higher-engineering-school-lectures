@@ -43,9 +43,9 @@ function PostDetailPage() {
         extra={
           <Space>
             <Link to="/editor" search={{ id: post.id }}>
-              <Button icon={<EditOutlined />}>Редактировать</Button>
+              <Button size="large" icon={<EditOutlined />}>Редактировать</Button>
             </Link>
-            <Button danger icon={<DeleteOutlined />} loading={deleteMutation.isPending} onClick={() => deleteMutation.mutate()}>
+            <Button size="large" danger icon={<DeleteOutlined />} loading={deleteMutation.isPending} onClick={() => deleteMutation.mutate()}>
               Удалить
             </Button>
           </Space>
