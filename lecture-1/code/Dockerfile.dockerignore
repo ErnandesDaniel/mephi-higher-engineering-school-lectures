@@ -1,20 +1,3 @@
-# Dockerfile-специфичный ignore для сборки фронтенда.
-#
-# Почему так, а не обычный .dockerignore:
-#   1. Контекст сборки фронтенда — КОРЕНЬ репозитория (context: ..), а не папка frontend/.
-#      Причина: образ фронта собирает не только frontend/, но и docs/ — из docs генерируются
-#      YAML-спецификации (TypeSpec → OpenAPI/AsyncAPI), MQTT-события
-#      (generate-asyncapi-frontend-events) и REST-клиент (kubb читает docs/api/build/openapi.yaml).
-#      Одному контексту соответствует одна папка, поэтому это должен быть общий родитель
-#      frontend/ и docs/ — корень репозитория.
-#   2. Docker читает обычный .dockerignore только из корня контекста. Значит
-#      frontend/.dockerignore не использовался бы вообще.
-#   3. BuildKit поддерживает Dockerfile-специфичный ignore: файл с именем
-#      <имя Dockerfile>.dockerignore рядом с Dockerfile (здесь frontend/Dockerfile.dockerignore).
-#      Он ЗАМЕНЯЕТ корневой .dockerignore для этой сборки.
-#
-# Паттерны задаются относительно корня контекста (корня репозитория), не относительно frontend/.
-
 # Git
 .git
 .gitignore
@@ -23,25 +6,20 @@
 .idea
 
 # OS
-nul
+.DS_Store
 
 # Environment
-**/.env
+.env
+.env.*
 
 # Dependencies / build output
-**/node_modules
-**/dist
-**/storybook-static
-**/target
-**/*.jar
+node_modules
+dist
+.tanstack
 
-# Infrastructure data (volumes)
-infra/local/data
+# Generated
+src/routeTree.gen.ts
+.vite-hooks/_
 
-# Generated artifacts: не тащим их из хост-контекста, чтобы сборка воспроизводимо
-# пересоздавала их сама (prebuild → `vp run generate`).
-frontend/src/routeTree.gen.ts
-frontend/src/shared/rest-client
-frontend/src/shared/mqtt-client/events
-docs/api/build/openapi.yaml
-docs/api/build/asyncapi.yaml
+# Misc
+*.log

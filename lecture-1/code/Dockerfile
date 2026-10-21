@@ -9,12 +9,12 @@ RUN bun install
 COPY . .
 RUN bunx vp build
 
-# ---------- Stage 2: serve ----------
-FROM nginx:1.27-alpine
+# ---------- Stage 2: serve (non-root, k8s-friendly) ----------
+FROM nginxinc/nginx-unprivileged:1.27-alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]
