@@ -37,11 +37,11 @@ bun run dev          # dev-сервер на http://localhost:3000
 
 Мок-API в `src/api/posts.ts` (in-memory данные с задержкой). Страницы:
 
-- `/` — список постов: `useInfiniteQuery` («загрузить ещё»), поиск через search params (`?q=`), оптимистичный лайк (`useMutation` + `onMutate`/`onError`/`onSettled`), prefetch детали при наведении, `refetch`.
-- `/posts/$postId` — деталь поста + комментарии: `loader` с `ensureQueryData` (prefetch при переходе), `useQuery` для поста и комментариев, мутации лайка и удаления с инвалидацией.
-- `/new` — создание поста: `useMutation` с `onSuccess`, инвалидация списка, переход на новый пост.
+- `/` — список постов: `useInfiniteQuery` («загрузить ещё»), поиск через search params (`?q=`), удаление, prefetch детали при наведении, `refetch`.
+- `/posts/$postId` — деталь поста + комментарии: `loader` с `ensureQueryData` (prefetch при переходе), `useQuery` для поста и комментариев, удаление с инвалидацией.
+- `/editor` — создание и редактирование поста (одна страница, режим определяется по `?id=`): `useMutation` с `onSuccess`, инвалидация списка, переход на список после сохранения.
 
-Фичи TanStack Query, которые показаны: `staleTime`/`gcTime`, `queryKey`, `invalidateQueries`, `prefetchQuery`, `ensureQueryData`, `cancelQueries`, `setQueryData`, optimistic updates, dependent queries, infinite query.
+Фичи TanStack Query, которые показаны: `staleTime`/`gcTime`, `queryKey`, `invalidateQueries`, `prefetchQuery`, `ensureQueryData`, `cancelQueries`, `setQueryData`, optimistic updates (ранее), dependent queries (enabled), infinite query.
 
 ## Docker
 

@@ -1,18 +1,14 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchPost, fetchComments, likePost, deletePost } from "@/api/posts";
+import { Button, Card, Space, Typography, List } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { fetchPost, fetchComments, deletePost } from "@/api/posts";
 
 export const Route = createFileRoute("/posts/$postId")({
   loader: async ({ params, context }) => {
     const id = Number(params.postId);
-    await context.queryClient.ensureQueryData({
-      queryKey: ["post", id],
-      queryFn: () => fetchPost(id),
-    });
-    await context.queryClient.ensureQueryData({
-      queryKey: ["comments", id],
-      queryFn: () => fetchComments(id),
-    });
+    await context.queryClient.ensureQueryData({ queryKey: ["post", id], queryFn: () => fetchPost(id) });
+    await context.queryClient.ensureQueryData({ queryKey: ["comments", id], queryFn: () => fetchComments(id) });
   },
   component: PostDetailPage,
 });
@@ -26,11 +22,6 @@ function PostDetailPage() {
   const postQuery = useQuery({ queryKey: ["post", id], queryFn: () => fetchPost(id) });
   const commentsQuery = useQuery({ queryKey: ["comments", id], queryFn: () => fetchComments(id) });
 
-  const likeMutation = useMutation({
-    mutationFn: () => likePost(id),
-    onSuccess: (updated) => queryClient.setQueryData(["post", id], updated),
-  });
-
   const deleteMutation = useMutation({
     mutationFn: () => deletePost(id),
     onSuccess: () => {
@@ -39,51 +30,47 @@ function PostDetailPage() {
     },
   });
 
-  if (postQuery.isLoading) return <p>Загрузка поста…</p>;
-  if (postQuery.isError)
-    return <p style={{ color: "crimson" }}>Ошибка: {(postQuery.error as Error).message}</p>;
+  if (postQuery.isLoading) return <Typography.Text>Загрузка поста…</Typography.Text>;
+  if (postQuery.isError) return <Typography.Text type="danger">Ошибка: {(postQuery.error as Error).message}</Typography.Text>;
 
   const post = postQuery.data!;
 
   return (
-    <article>
-      <Link to="/" style={{ display: "inline-block", marginBottom: 12 }}>
-        ← Назад
-      </Link>
-      <h2>{post.title}</h2>
-      <p style={{ color: "#6b7280", fontSize: 13 }}>
-        {new Date(post.createdAt).toLocaleString("ru-RU")} · ❤ {post.likes}
-      </p>
-      <p style={{ lineHeight: 1.6 }}>{post.body}</p>
+    <Space direction="vertical" size="large" style={{ width: "100%" }}>
+      <Link to="/">← Назад к списку</Link>
+      <Card
+        title={post.title}
+        extra={
+          <Space>
+            <Link to="/editor" search={{ id: post.id }}>
+              <Button icon={<EditOutlined />}>Редактировать</Button>
+            </Link>
+            <Button danger icon={<DeleteOutlined />} loading={deleteMutation.isPending} onClick={() => deleteMutation.mutate()}>
+              Удалить
+            </Button>
+          </Space>
+        }
+      >
+        <Typography.Paragraph style={{ whiteSpace: "pre-wrap" }}>{post.body}</Typography.Paragraph>
+        <Typography.Text type="secondary">
+          {new Date(post.createdAt).toLocaleString("ru-RU")}
+        </Typography.Text>
+      </Card>
 
-      <div style={{ display: "flex", gap: 8, margin: "16px 0" }}>
-        <button onClick={() => likeMutation.mutate()} disabled={likeMutation.isPending}>
-          Лайк {likeMutation.isPending ? "…" : ""}
-        </button>
-        <button
-          onClick={() => deleteMutation.mutate()}
-          disabled={deleteMutation.isPending}
-          style={{ color: "crimson" }}
-        >
-          Удалить пост
-        </button>
-      </div>
-
-      <h3>Комментарии</h3>
-      {commentsQuery.isLoading && <p>Загрузка комментариев…</p>}
-      {commentsQuery.isError && (
-        <p style={{ color: "crimson" }}>Не удалось загрузить комментарии</p>
-      )}
-      <ul style={{ paddingLeft: 20 }}>
-        {(commentsQuery.data ?? []).map((c) => (
-          <li key={c.id} style={{ marginBottom: 8 }}>
-            <strong>{c.author}:</strong> {c.text}
-          </li>
-        ))}
-        {commentsQuery.data?.length === 0 && (
-          <li style={{ color: "#9ca3af" }}>Комментариев пока нет</li>
-        )}
-      </ul>
-    </article>
+      <Card title="Комментарии">
+        {commentsQuery.isLoading && <Typography.Text>Загрузка комментариев…</Typography.Text>}
+        {commentsQuery.isError && <Typography.Text type="danger">Не удалось загрузить комментарии</Typography.Text>}
+        <List
+          dataSource={commentsQuery.data ?? []}
+          renderItem={(c) => (
+            <List.Item>
+              <Typography.Text strong>{c.author}: </Typography.Text>
+              {c.text}
+            </List.Item>
+          )}
+          locale={{ emptyText: "Комментариев пока нет" }}
+        />
+      </Card>
+    </Space>
   );
 }
