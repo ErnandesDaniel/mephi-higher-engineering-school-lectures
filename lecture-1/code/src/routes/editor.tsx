@@ -46,7 +46,8 @@ function EditorPage() {
   if (isEdit && postQuery.isLoading) return <Spin />;
 
   return (
-    <Space direction="vertical" size="large" style={{ width: "100%", maxWidth: 720, margin: "0 auto" }}>
+    <div style={{ maxWidth: 720, margin: "0 auto", width: "100%", padding: "0 24px" }}>
+      <Space direction="vertical" size="large" style={{ width: "100%" }}>
       <Typography.Title level={3}>{isEdit ? "Редактирование поста" : "Новый пост"}</Typography.Title>
       <Form
         form={form}
@@ -69,6 +70,7 @@ function EditorPage() {
       </Form>
       {mutation.isError && <Typography.Text type="danger">Ошибка: {(mutation.error as Error).message}</Typography.Text>}
     </Space>
+    </div>
   );
 }
 
