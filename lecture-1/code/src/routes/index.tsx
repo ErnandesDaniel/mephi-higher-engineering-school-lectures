@@ -69,6 +69,7 @@ function PostsPage() {
         renderItem={(post) => (
           <List.Item>
             <Card
+              style={{ width: 400 }}
               title={<Link to="/posts/$postId" params={{ postId: String(post.id) }}>{post.title}</Link>}
               extra={
                 <Space>
