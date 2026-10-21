@@ -1,0 +1,18 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "deckcraft": {
+        "type": "local",
+        "command": [
+          "C:\\Program Files\\DeckCraft\\deckcraft-cli.exe",
+          "mcp",
+          "--automation-read-root",
+          "C:\\Users\\Ernan\\WebstormProjects\\mephi-higher-engineering-school-lectures",
+          "--automation-write-root",
+          "C:\\Users\\Ernan\\WebstormProjects\\mephi-higher-engineering-school-lectures"
+        ]
+      }
+    }
+  }
+}
