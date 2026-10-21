@@ -1,7 +1,7 @@
 ﻿import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import React from "react";
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button, Card, Input, Space, Typography, List, Tag } from "antd";
+import { Button, Card, Input, Space, Typography, Tag } from "antd";
 import { DeleteOutlined, EditOutlined, PlusOutlined, ReloadOutlined } from "@ant-design/icons";
 import { fetchPosts, fetchPost, deletePost } from "@/api/posts";
 import { z } from "zod";
@@ -63,42 +63,39 @@ function PostsPage() {
         <Typography.Text type="danger">Ошибка: {(postsQuery.error as Error).message}</Typography.Text>
       )}
 
-      <List
-        grid={{ gutter: 16, xs: 1 }}
-        dataSource={allPosts}
-        renderItem={(post) => (
-          <List.Item style={{ display: "flex", justifyContent: "center" }}>
-            <Card
-              style={{ width: "70vw", margin: "0 auto" }}
-              title={<Link to="/posts/$postId" params={{ postId: String(post.id) }}>{post.title}</Link>}
-              extra={
-                <Space>
-                  <Link to="/editor" search={{ id: post.id }}>
-                    <Button type="text" icon={<EditOutlined />} size="small" />
-                  </Link>
-                  <Button
-                    type="text"
-                    danger
-                    icon={<DeleteOutlined />}
-                    size="small"
-                    loading={deleteMutation.isPending}
-                    onClick={() => deleteMutation.mutate(post.id)}
-                  />
-                </Space>
-              }
-              hoverable
-              onMouseEnter={() =>
-                void queryClient.prefetchQuery({ queryKey: ["post", post.id], queryFn: () => fetchPost(post.id) })
-              }
-            >
-              <Typography.Paragraph ellipsis={{ rows: 2 }} style={{ marginBottom: 8 }}>
-                {post.body}
-              </Typography.Paragraph>
-              <Tag color="blue">{new Date(post.createdAt).toLocaleDateString("ru-RU")}</Tag>
-            </Card>
-          </List.Item>
-        )}
-      />
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, width: "100%" }}>
+        {allPosts.map((post) => (
+          <Card
+            key={post.id}
+            style={{ width: "70vw" }}
+            title={<Link to="/posts/$postId" params={{ postId: String(post.id) }}>{post.title}</Link>}
+            extra={
+              <Space>
+                <Link to="/editor" search={{ id: post.id }}>
+                  <Button type="text" icon={<EditOutlined />} size="small" />
+                </Link>
+                <Button
+                  type="text"
+                  danger
+                  icon={<DeleteOutlined />}
+                  size="small"
+                  loading={deleteMutation.isPending}
+                  onClick={() => deleteMutation.mutate(post.id)}
+                />
+              </Space>
+            }
+            hoverable
+            onMouseEnter={() =>
+              void queryClient.prefetchQuery({ queryKey: ["post", post.id], queryFn: () => fetchPost(post.id) })
+            }
+          >
+            <Typography.Paragraph ellipsis={{ rows: 2 }} style={{ marginBottom: 8 }}>
+              {post.body}
+            </Typography.Paragraph>
+            <Tag color="blue">{new Date(post.createdAt).toLocaleDateString("ru-RU")}</Tag>
+          </Card>
+        ))}
+      </div>
 
       <Space>
         <Button
