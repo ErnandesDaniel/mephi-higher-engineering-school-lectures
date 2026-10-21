@@ -49,7 +49,7 @@ bun run dev          # dev-сервер на http://localhost:3000
 
 ```bash
 docker build -t lecture-1-starter .
-docker run --rm -p 8080:80 lecture-1-starter
+docker run --rm -p 8080:8080 lecture-1-starter
 ```
 
 Приложение будет доступно на http://localhost:8080.
