@@ -67,7 +67,7 @@ function PostsPage() {
         grid={{ gutter: 16, xs: 1 }}
         dataSource={allPosts}
         renderItem={(post) => (
-          <List.Item>
+          <List.Item style={{ display: "flex", justifyContent: "center" }}>
             <Card
               style={{ width: "70vw", margin: "0 auto" }}
               title={<Link to="/posts/$postId" params={{ postId: String(post.id) }}>{post.title}</Link>}
