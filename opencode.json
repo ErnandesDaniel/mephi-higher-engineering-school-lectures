@@ -12,6 +12,19 @@
           "--automation-write-root",
           "C:\\Users\\Ernan\\WebstormProjects\\mephi-higher-engineering-school-lectures"
         ]
+      },
+      "wordcraft": {
+        "type": "local",
+        "command": [
+          "C:\\Program Files\\WordCraft\\wordcraft-cli.exe",
+          "mcp",
+          "--author",
+          "OpenCode",
+          "--automation-read-root",
+          "C:\\Users\\Ernan\\WebstormProjects\\mephi-higher-engineering-school-lectures",
+          "--automation-write-root",
+          "C:\\Users\\Ernan\\WebstormProjects\\mephi-higher-engineering-school-lectures"
+        ]
       }
     }
   }
